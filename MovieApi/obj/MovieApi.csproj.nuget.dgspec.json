@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieAPI\\MovieApi\\MovieApi.csproj": {}
+    "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieApi\\MovieApi\\MovieApi.csproj": {}
   },
   "projects": {
-    "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieAPI\\MovieApi\\MovieApi.csproj": {
+    "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieApi\\MovieApi\\MovieApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieAPI\\MovieApi\\MovieApi.csproj",
+        "projectUniqueName": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieApi\\MovieApi\\MovieApi.csproj",
         "projectName": "MovieApi",
-        "projectPath": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieAPI\\MovieApi\\MovieApi.csproj",
+        "projectPath": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieApi\\MovieApi\\MovieApi.csproj",
         "packagesPath": "C:\\Users\\moral\\.nuget\\packages\\",
-        "outputPath": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieAPI\\MovieApi\\obj\\",
+        "outputPath": "D:\\c# Proj\\ASP.NET 8\\Web API\\MovieApi\\MovieApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
