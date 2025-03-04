@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Demo API",
+    "title": "Movie API",
     "version": "v1"
   },
   "paths": {
@@ -140,24 +140,61 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateMovieDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMovieDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMovieDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMovieDto"
+                "required": [
+                  "Genre",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Genre": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Director": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Year": {
+                    "maximum": 2100,
+                    "minimum": 1888,
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Description": {
+                    "maxLength": 500,
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Genre": {
+                  "style": "form"
+                },
+                "Image": {
+                  "style": "form"
+                },
+                "Director": {
+                  "style": "form"
+                },
+                "Year": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -208,24 +245,67 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateMovieDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateMovieDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateMovieDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateMovieDto"
+                "required": [
+                  "Genre",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Genre": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "ImageUrl": {
+                    "type": "string"
+                  },
+                  "Director": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Year": {
+                    "maximum": 2100,
+                    "minimum": 1888,
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Description": {
+                    "maxLength": 500,
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Genre": {
+                  "style": "form"
+                },
+                "Image": {
+                  "style": "form"
+                },
+                "ImageUrl": {
+                  "style": "form"
+                },
+                "Director": {
+                  "style": "form"
+                },
+                "Year": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -261,42 +341,6 @@
   },
   "components": {
     "schemas": {
-      "CreateMovieDto": {
-        "required": [
-          "genre",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "title": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "genre": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "director": {
-            "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "year": {
-            "maximum": 2100,
-            "minimum": 1888,
-            "type": "integer",
-            "format": "int32"
-          },
-          "description": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "LoginDto": {
         "required": [
           "password",
@@ -341,42 +385,6 @@
           "confirmPassword": {
             "minLength": 1,
             "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateMovieDto": {
-        "required": [
-          "genre",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "title": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "genre": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "director": {
-            "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "year": {
-            "maximum": 2100,
-            "minimum": 1888,
-            "type": "integer",
-            "format": "int32"
-          },
-          "description": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

@@ -79,21 +79,34 @@ namespace MovieApi.Repository
             return await _context.Movies.FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public Task<Movie?> GetByIdAsyncNoTracking(int id)
+        {
+            return _context.Movies.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+        }
+
         public async Task<Movie?> UpdateAsync(int id, UpdateMovieDto updateDto)
         {
-            var existingMovies = await _context.Movies.FindAsync(id);
+            var existingMovie = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
 
-            if (existingMovies == null) return null;
+            if (existingMovie == null) return null;
 
-            existingMovies.Title = updateDto.Title;
-            existingMovies.Genre = updateDto.Genre;
-            existingMovies.Director = updateDto.Director;
-            existingMovies.Year = updateDto.Year;
-            existingMovies.Description = updateDto.Description;
+            var updatedMovie = new Movie
+            {
+                Id = id, 
+                Title = updateDto.Title,
+                Genre = updateDto.Genre,
+                Director = updateDto.Director,
+                Year = updateDto.Year,
+                Description = updateDto.Description,
+                Image = updateDto.ImageUrl 
+            };
 
+            _context.Movies.Update(updatedMovie);
             await _context.SaveChangesAsync();
-            return existingMovies;
 
+            return updatedMovie;
         }
+
+
     }
 }

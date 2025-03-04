@@ -51,13 +51,13 @@ namespace MovieApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9ad6cb3f-7b90-49f0-b224-c560034eed7c",
+                            Id = "95258178-d2c5-40ee-bd28-70cde343141e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "59d8fb85-25ec-4b90-a2a4-baec24cdf671",
+                            Id = "57e2a745-ff7d-46c6-91ad-50e05efc0758",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -252,6 +252,9 @@ namespace MovieApi.Migrations
 
                     b.Property<string>("Genre")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

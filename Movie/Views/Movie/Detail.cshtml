@@ -1,0 +1,167 @@
+﻿@model MovieModel
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #111;
+        color: #fff;
+    }
+
+    .hero-section {
+        position: relative;
+        background: url('/images/default-movie.jpg') center/cover no-repeat;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .movie-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255, 215, 0, 0.5);
+    }
+
+    .btn-custom {
+        background: linear-gradient(45deg, #ffcc00, #ff9900);
+        border: none;
+        padding: 10px 20px;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 30px;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(45deg, #ff9900, #ff6600);
+        transform: scale(1.05);
+    }
+
+    .rating {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ffd700;
+    }
+
+    .comment-section {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+</style>
+
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="display-4 text-uppercase">@Model.Title</h1>
+        <p class="lead">A masterpiece by <span class="fw-bold">@Model.Director</span></p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-4 text-center">
+            <img class="img-fluid rounded-3 shadow-lg" src="@Model.Image" alt="Movie Poster" style="height: 400px; object-fit: cover;">
+        </div>
+        <div class="col-md-8">
+            <div class="movie-card p-4">
+                <h2 class="text-uppercase fw-bold">@Model.Title</h2>
+                <p class="text-warning mb-2 fw-semibold">Genre: @Model.Genre</p>
+                <p class="text-light">@Model.Description</p>
+                <ul class="list-unstyled">
+                    <li><strong>Release Year:</strong> @Model.Year</li>
+                    <li><strong>Director:</strong> @Model.Director</li>
+                    <li><strong>Genre:</strong> @Model.Genre</li>
+                </ul>
+
+                <div class="mt-4">
+                    <a href="#" class="btn btn-custom">Watch Now</a>
+                    <a href="#" class="btn btn-outline-light ms-2">Add to Favorites</a>
+                </div>
+
+                <!-- Like Button -->
+                <div class="mt-4">
+                    <button class="btn btn-danger" onclick="likeMovie()">❤️ Like (<span id="like-count">0</span>)</button>
+                </div>
+
+                <!-- Rating System -->
+                <div class="mt-4">
+                    <p class="fw-bold">Rate this movie:</p>
+                    <span class="rating" onclick="rateMovie(1)">★</span>
+                    <span class="rating" onclick="rateMovie(2)">★</span>
+                    <span class="rating" onclick="rateMovie(3)">★</span>
+                    <span class="rating" onclick="rateMovie(4)">★</span>
+                    <span class="rating" onclick="rateMovie(5)">★</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="mt-5 comment-section">
+        <h3>Comments</h3>
+        <textarea class="form-control mt-3" id="comment-text" placeholder="Write a comment..."></textarea>
+        <button class="btn btn-primary mt-3" onclick="postComment()">Post Comment</button>
+
+        <div class="mt-4" id="comments-list">
+            <!-- Comments will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    let likeCount = 0;
+    let comments = [];
+
+    function likeMovie() {
+        likeCount++;
+        document.getElementById("like-count").innerText = likeCount;
+    }
+
+    function rateMovie(stars) {
+        alert(`You rated this movie ${stars} stars!`);
+    }
+
+    function postComment() {
+        let commentText = document.getElementById("comment-text").value;
+        if (commentText.trim() !== "") {
+            comments.push(commentText);
+            let commentsHtml = comments.map(c => `<p>🗨 ${c}</p>`).join("");
+            document.getElementById("comments-list").innerHTML = commentsHtml;
+            document.getElementById("comment-text").value = "";
+        }
+    }
+</script>

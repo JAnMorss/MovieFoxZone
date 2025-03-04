@@ -11,6 +11,7 @@ namespace MovieApi.DTOs.Movie
         [Required(ErrorMessage = "Genre is required.")]
         [MaxLength(50, ErrorMessage = "Genre cannot exceed 50 characters.")]
         public string Genre { get; set; } = string.Empty;
+        public IFormFile Image { get; set; }
 
         [MaxLength(100, ErrorMessage = "Director name cannot exceed 100 characters.")]
         public string Director { get; set; } = string.Empty;

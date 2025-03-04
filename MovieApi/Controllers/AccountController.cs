@@ -41,6 +41,7 @@ namespace MovieApi.Controllers
                 new NewUserDto
                 {
                     UserName = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
                     Token = _tokenService.CreateToken(user)
                 }

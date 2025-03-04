@@ -15,14 +15,15 @@ namespace MovieApi.Controllers
     {
         private readonly IMovieRepository _movieRepo;
         private readonly IMapper _mapper;
-        public MovieController(IMovieRepository movieRepo, IMapper mapper)
+        private readonly IPhotoService _photoService;
+        public MovieController(IMovieRepository movieRepo, IMapper mapper, IPhotoService photoService)
         {
             _movieRepo = movieRepo;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllMovie([FromQuery] QueryObject query)
         {   
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -35,7 +36,6 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,42 +51,77 @@ namespace MovieApi.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDto createDto)
+        public async Task<IActionResult> CreateMovie([FromForm] CreateMovieDto createDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var movie = _mapper.Map<Movie>(createDto);
 
-            var createdmovie = await _movieRepo.CreateAsync(movie);
+            if (createDto.Image != null)
+            {
+                var result = await _photoService.AddPhotoAsync(createDto.Image);
+                if (result.Error != null)
+                {
+                    return BadRequest(new { error = result.Error.Message });
+                }
 
-            return CreatedAtAction(nameof(GetById), new { id = createdmovie.Id }, _mapper.Map<MovieDto>(createdmovie));
+                movie.Image = result.Url.ToString();
+            }
+
+            var createdMovie = await _movieRepo.CreateAsync(movie);
+            return CreatedAtAction(nameof(GetById), new { id = createdMovie.Id }, _mapper.Map<MovieDto>(createdMovie));
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateMovie([FromRoute] int id, [FromBody] UpdateMovieDto updateDto)
+        public async Task<IActionResult> UpdateMovie([FromRoute] int id, [FromForm] UpdateMovieDto updateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var updatemovie = await _movieRepo.UpdateAsync(id, updateDto);
+            var existingMovie = await _movieRepo.GetByIdAsyncNoTracking(id);
+            if (existingMovie == null) return NotFound();
 
-            if (updatemovie == null) return NotFound();
+            if (updateDto.Image != null)
+            {
+                if (!string.IsNullOrEmpty(existingMovie.Image))
+                {
+                    await _photoService.DeletePhotoAsync(existingMovie.Image);
+                }
 
-            return Ok(_mapper.Map<MovieDto>(updatemovie));
+                var result = await _photoService.AddPhotoAsync(updateDto.Image);
+                if (result.Error != null)
+                {
+                    return BadRequest(new { error = result.Error.Message });
+                }
+
+                updateDto.ImageUrl = result.Url.ToString(); 
+            }
+            else
+            {
+                updateDto.ImageUrl = existingMovie.Image; 
+            }
+
+            var updatedMovie = await _movieRepo.UpdateAsync(id, updateDto);
+            if (updatedMovie == null) return NotFound();
+
+            return Ok(_mapper.Map<MovieDto>(updatedMovie));
         }
+
 
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteMovie([FromRoute] int id)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var movie = await _movieRepo.GetByIdAsync(id);
+            if (movie == null) return NotFound();
 
-            var deleteMovie = await _movieRepo.DeleteAsync(id);
+            if (!string.IsNullOrEmpty(movie.Image))
+            {
+                await _photoService.DeletePhotoAsync(movie.Image);
+            }
 
-            if (deleteMovie == null) return NotFound();
-
+            await _movieRepo.DeleteAsync(id);
             return NoContent();
-
         }
     }
 }

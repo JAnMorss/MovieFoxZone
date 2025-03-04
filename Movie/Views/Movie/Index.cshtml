@@ -1,0 +1,183 @@
+﻿@model List<MovieModel>
+
+@{
+    ViewData["Title"] = "Movie List";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #111;
+        color: #fff;
+        margin-top: 100px;
+    }
+
+    /* Movie Carousel */
+    .carousel img {
+        object-fit: cover;
+        height: 400px;
+        border-radius: 15px;
+    }
+
+    .carousel-caption {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Movie Card */
+    .movie-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.5);
+        }
+
+        .movie-card img {
+            object-fit: cover;
+            height: 300px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+    /* Buttons */
+    .btn-custom {
+        background: linear-gradient(45deg, #ffcc00, #ff9900);
+        border: none;
+        padding: 10px 20px;
+        color: #fff;
+        font-weight: bold;
+        transition: 0.3s;
+        border-radius: 5px;
+    }
+
+        .btn-custom:hover {
+            background: linear-gradient(45deg, #ff9900, #ff6600);
+            transform: scale(1.05);
+        }
+
+    /* Reaction Buttons */
+    .reaction-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.5rem;
+    }
+
+        .reaction-bar .reaction {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+            .reaction-bar .reaction:hover {
+                transform: scale(1.2);
+            }
+
+    .comment-section {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+        .comment-section input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            padding: 5px;
+        }
+</style>
+
+<!-- Movie Carousel -->
+@if (Model.Any())
+{
+    <div id="movieCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach (var item in Model.Take(5))
+            {
+                <div class="carousel-item @(item == Model.First() ? "active" : "")">
+                    <img src="@item.Image" class="d-block w-100" alt="@item.Title">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@item.Title</h5>
+                        <p>@item.Description</p>
+                        <a asp-controller="Movie" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-warning">View</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+}
+
+<!-- Movie List Container -->
+<div class="container py-5">
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center fs-5">No movies found.</div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="movie-card p-4">
+                        <img src="@item.Image" alt="Movie Poster">
+                        <div class="mt-3">
+                            <h4 class="text-warning fw-bold">@item.Title</h4>
+                            <small class="text-light fw-semibold">Directed by: @item.Director</small>
+                            <p class="text-muted mb-1"><strong>Year:</strong> @item.Year</p>
+                            <p class="text-muted"><strong>Genre:</strong> @item.Genre</p>
+                            <p>@item.Description</p>
+
+                            <!-- Reactions & Comments -->
+                            <div class="reaction-bar">
+                                <span class="reaction">👍</span>
+                                <span class="reaction">❤️</span>
+                                <span class="reaction">🔥</span>
+                                <span class="reaction">😂</span>
+                            </div>
+                            <div class="comment-section">
+                                <input type="text" placeholder="Write a comment...">
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="btn-group">
+                                    <a asp-controller="Movie" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-custom">View</a>
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                                    {
+                                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a>
+                                        <a asp-controller="Movie" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    document.querySelectorAll('.reaction').forEach(reaction => {
+        reaction.addEventListener('click', function () {
+            alert('You reacted with: ' + this.textContent);
+        });
+    });
+</script>

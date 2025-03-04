@@ -1,0 +1,82 @@
+﻿body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #111;
+    color: #fff;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 500px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+}
+
+.card-header {
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 2px solid #ffcc00;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ff9900;
+    box-shadow: 0 0 12px rgba(255, 165, 0, 0.7);
+}
+
+.btn-custom {
+    background: linear-gradient(45deg, #ffcc00, #ff9900);
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.btn-custom:hover {
+    background: linear-gradient(45deg, #ff9900, #ff6600);
+    transform: scale(1.07);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
+}
+
+.glow {
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #ffcc00;
+    }
+
+    100% {
+        text-shadow: 0 0 20px #ff9900;
+    }
+}
