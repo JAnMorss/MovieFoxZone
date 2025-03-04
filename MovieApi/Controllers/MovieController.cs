@@ -55,7 +55,7 @@ namespace MovieApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var movie = _mapper.Map<Movie>(createDto);
+            var movieModel = _mapper.Map<Movie>(createDto);
 
             if (createDto.Image != null)
             {
@@ -65,10 +65,10 @@ namespace MovieApi.Controllers
                     return BadRequest(new { error = result.Error.Message });
                 }
 
-                movie.Image = result.Url.ToString();
+                movieModel.Image = result.Url.ToString();
             }
 
-            var createdMovie = await _movieRepo.CreateAsync(movie);
+            var createdMovie = await _movieRepo.CreateAsync(movieModel);
             return CreatedAtAction(nameof(GetById), new { id = createdMovie.Id }, _mapper.Map<MovieDto>(createdMovie));
         }
 
